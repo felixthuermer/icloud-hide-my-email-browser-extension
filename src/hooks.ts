@@ -11,6 +11,7 @@ import {
   setBrowserStorageValue,
   Store,
 } from './storage';
+import { logError } from './log';
 
 export function useBrowserStorageState<K extends keyof Store>(
   key: K,
@@ -32,7 +33,7 @@ export function useBrowserStorageState<K extends keyof Store>(
     }
 
     getBrowserStorageState()
-      .catch(console.error)
+      .catch(logError)
       .finally(() => setIsLoading(false));
   }, [key]);
 

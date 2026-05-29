@@ -10,6 +10,7 @@ import React, {
 import ICloudClient, {
   PremiumMailSettings,
   HmeEmail,
+  DEFAULT_SETUP_URL,
 } from '../../iCloudClient';
 import './Popup.css';
 import { useBrowserStorageState } from '../../hooks';
@@ -17,7 +18,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faRefresh,
   faClipboard,
-  faCheck,
   faList,
   faSignOut,
   IconDefinition,
@@ -30,7 +30,6 @@ import {
   faQuestionCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { faFirefoxBrowser } from '@fortawesome/free-brands-svg-icons';
-import { MessageType, sendMessageToTab } from '../../messages';
 import {
   ErrorMessage,
   LoadingButton,
@@ -50,11 +49,8 @@ import {
   STATE_MACHINE_TRANSITIONS,
   AuthenticatedAndManagingAction,
 } from './stateMachine';
-import {
-  CONTEXT_MENU_ITEM_ID,
-  SIGNED_OUT_CTA_COPY,
-} from '../Background/constants';
 import { isFirefox } from '../../browserUtils';
+import { logError } from '../../log';
 
 type TransitionCallback<T extends PopupAction> = (action: T) => void;
 
@@ -145,10 +141,6 @@ const ReservationResult = (props: { hme: HmeEmail }) => {
     await navigator.clipboard.writeText(props.hme.hme);
   };
 
-  const onAutofillClick = async () => {
-    await sendMessageToTab(MessageType.Autofill, props.hme.hme);
-  };
-
   const btnClassName =
     'focus:outline-hidden text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 block w-full';
 
@@ -160,24 +152,14 @@ const ReservationResult = (props: { hme: HmeEmail }) => {
       <p>
         <strong>{props.hme.hme}</strong> has successfully been reserved!
       </p>
-      <div className="grid grid-cols-2 gap-2">
-        <button
-          type="button"
-          className={btnClassName}
-          onClick={onCopyToClipboardClick}
-        >
-          <FontAwesomeIcon icon={faClipboard} className="mr-1" />
-          Copy to clipboard
-        </button>
-        <button
-          type="button"
-          className={btnClassName}
-          onClick={onAutofillClick}
-        >
-          <FontAwesomeIcon icon={faCheck} className="mr-1" />
-          Autofill
-        </button>
-      </div>
+      <button
+        type="button"
+        className={btnClassName}
+        onClick={onCopyToClipboardClick}
+      >
+        <FontAwesomeIcon icon={faClipboard} className="mr-1" />
+        Copy to clipboard
+      </button>
     </div>
   );
 };
@@ -199,15 +181,6 @@ const FooterButton = (
   );
 };
 
-async function performDeauthSideEffects(): Promise<void> {
-  await browser.contextMenus
-    .update(CONTEXT_MENU_ITEM_ID, {
-      title: SIGNED_OUT_CTA_COPY,
-      enabled: false,
-    })
-    .catch(console.debug);
-}
-
 const SignOutButton = (props: {
   callback: TransitionCallback<'SIGN_OUT'>;
   client: ICloudClient;
@@ -219,7 +192,6 @@ const SignOutButton = (props: {
         await props.client.signOut();
         // TODO: call the react state setter instead
         setBrowserStorageValue('clientState', undefined);
-        performDeauthSideEffects();
         props.callback('SIGN_OUT');
       }}
       label="Sign out"
@@ -293,7 +265,7 @@ const HmeGenerator = (props: {
       }
     };
 
-    getTabHost().catch(console.error);
+    getTabHost().catch(logError);
   }, []);
 
   const onEmailRefreshClick = async () => {
@@ -475,10 +447,6 @@ const HmeDetails = (props: {
     await navigator.clipboard.writeText(props.hme.hme);
   };
 
-  const onAutofillClick = async () => {
-    await sendMessageToTab(MessageType.Autofill, props.hme.hme);
-  };
-
   const btnClassName =
     'w-full justify-center text-white focus:ring-4 focus:outline-hidden font-medium rounded-lg px-2 py-3 text-center inline-flex items-center';
   const labelClassName = 'font-bold';
@@ -526,20 +494,13 @@ const HmeDetails = (props: {
         </div>
       )}
       {error && <ErrorMessage>{error}</ErrorMessage>}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-2 gap-2">
         <button
           title="Copy"
           className={`${btnClassName} bg-sky-400 hover:bg-sky-500 focus:ring-blue-300`}
           onClick={onCopyClick}
         >
-          <FontAwesomeIcon icon={faClipboard} />
-        </button>
-        <button
-          title="Autofill"
-          className={`${btnClassName} bg-sky-400 hover:bg-sky-500 focus:ring-blue-300`}
-          onClick={onAutofillClick}
-        >
-          <FontAwesomeIcon icon={faCheck} />
+          <FontAwesomeIcon icon={faClipboard} className="mr-1" /> Copy
         </button>
         <LoadingButton
           title={props.hme.isActive ? 'Deactivate' : 'Reactivate'}
@@ -556,7 +517,7 @@ const HmeDetails = (props: {
         {!props.hme.isActive && (
           <LoadingButton
             title="Delete"
-            className={`${btnClassName} bg-red-500 hover:bg-red-600 focus:ring-red-300 col-span-3`}
+            className={`${btnClassName} bg-red-500 hover:bg-red-600 focus:ring-red-300 col-span-2`}
             onClick={onDeletionClick}
             loading={isDeleteSubmitting}
           >
@@ -804,11 +765,19 @@ const Popup = () => {
 
   useEffect(() => {
     const syncClientAuthState = async () => {
-      const isAuthenticated =
-        clientState?.setupUrl !== undefined &&
-        (await new ICloudClient(clientState.setupUrl).isAuthenticated());
+      // Validate the browser's iCloud session directly on every popup open.
+      // If we already cached a setupUrl, re-use it; otherwise probe the default
+      // (international) endpoint. This is what lets the popup detect a sign-in
+      // that happened after install, and a sign-out, without a background
+      // webRequest listener.
+      const setupUrl = clientState?.setupUrl ?? DEFAULT_SETUP_URL;
+      const client = new ICloudClient(setupUrl);
+      const isAuthenticated = await client.isAuthenticated();
 
       if (isAuthenticated) {
+        // Persist the freshly validated webservices so the rest of the popup
+        // (and the Options page) can construct clients without re-validating.
+        setClientState({ setupUrl, webservices: client.webservices });
         setState((prevState) =>
           prevState === PopupState.SignedOut
             ? PopupState.Authenticated
@@ -817,7 +786,6 @@ const Popup = () => {
       } else {
         setState(PopupState.SignedOut);
         setClientState(undefined);
-        performDeauthSideEffects();
       }
 
       setClientAuthStateSynced(true);

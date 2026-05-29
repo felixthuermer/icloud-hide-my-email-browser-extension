@@ -1,11 +1,7 @@
-import React, { InputHTMLAttributes, useState } from 'react';
+import React from 'react';
 import { TitledComponent, Link } from '../../commonComponents';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faInfoCircle,
-  faCheckCircle,
-  faWarning,
-} from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faWarning } from '@fortawesome/free-solid-svg-icons';
 import { isFirefox } from '../../browserUtils';
 
 const Notice = (props: {
@@ -100,96 +96,33 @@ const SignInInstructions = () => {
   );
 };
 
-const AutofillableDemoInput = (props: {
-  inputAttributes: InputHTMLAttributes<HTMLInputElement>;
-  label: string;
-}) => {
-  const [autofillableInputValue, setAutoFillableInputValue] =
-    useState<string>();
-
-  return (
-    <div className="space-y-2">
-      <label
-        htmlFor={props.inputAttributes.id}
-        className="block font-semibold text-gray-600"
-      >
-        {props.label}{' '}
-        {autofillableInputValue?.endsWith('@icloud.com') && (
-          <FontAwesomeIcon
-            icon={faCheckCircle}
-            className="ml-1 mt-1 text-green-500"
-          />
-        )}
-      </label>
-      <input
-        className="bg-[Canvas] block w-full rounded-md relative px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-hidden focus:ring-sky-400 focus:border-sky-400 focus:z-10 sm:text-sm"
-        defaultValue={autofillableInputValue}
-        onInput={(e) =>
-          setAutoFillableInputValue((e.target as HTMLInputElement).value)
-        }
-        {...props.inputAttributes}
-      />
-    </div>
-  );
-};
-
 const UsageInstructions = () => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
         <p>
-          In the extension pop-up (🍏 icon) you can find a
-          MacOS-System-Settings-like UI that enables you to generate new
-          HideMyEmail addresses and manage existing ones.
+          Click the extension icon (🍏) in your browser toolbar to open the
+          pop-up. It provides a MacOS-System-Settings-like UI where you can
+          generate a new HideMyEmail address and manage your existing ones.
         </p>
         <p>
-          <span className="font-semibold">
-            In most cases though, you don&apos;t need to interact with the
-            pop-up UI
-          </span>
-          . The extension will automatically detect email input fields and
-          prompt you to autofill new addresses! Alternatively, you can
-          right-click on any text input field and select the menu item of the
-          extension.
+          To use a freshly generated address, click{' '}
+          <span className="font-semibold">Use</span> to reserve it, then{' '}
+          <span className="font-semibold">Copy to clipboard</span> and paste it
+          into the sign-up form of any website. Each address is labelled with
+          the site you are currently on, so it stays easy to recognise — you can
+          edit the label and add a note before reserving.
         </p>
       </div>
-      <div className="space-y-2">
-        <p>Try it yourself:</p>
-        <div className="w-full max-w-md p-3 border rounded-lg bg-gray-50">
-          <form className="space-y-2">
-            <AutofillableDemoInput
-              label="Autofill via button"
-              inputAttributes={{
-                id: 'autofill-by-button',
-                name: 'email',
-                type: 'email',
-                placeholder: 'Click (focus) on this field',
-              }}
-            />
-            <AutofillableDemoInput
-              label="Autofill via right-click context menu"
-              inputAttributes={{
-                id: 'autofill-by-right-click',
-                type: 'text',
-                placeholder:
-                  'Right click on this field and select the menu item of the extension',
-              }}
-            />
-          </form>
-        </div>
-      </div>
+      <Notice title="Managing your addresses">
+        <p>
+          In the &quot;Manage emails&quot; view you can search through your
+          addresses and deactivate, reactivate, or delete any of them.
+        </p>
+      </Notice>
       <div>
-        If you find the autofill-via-button feature intrusive, you can disable
-        it in the <Link href="./options.html">extension Options</Link>.
-      </div>
-      <div>
-        Don&apos;t forget to delete the HideMyEmail addresses you created above
-        for the purposes of trying this out:
-        <ol className="list-decimal list-inside">
-          <li>Open the extension pop-up (🍏 icon)</li>
-          <li>Navigate to the &quot;Manage emails&quot; view</li>
-          <li>Select, deactivate, and delete the relevant addresses</li>
-        </ol>
+        You can choose which address your mail is forwarded to in the{' '}
+        <Link href="./options.html">extension Options</Link>.
       </div>
     </div>
   );

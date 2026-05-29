@@ -9,9 +9,8 @@ import {
   TitledComponent,
   Link,
 } from '../../commonComponents';
-import startCase from 'lodash.startcase';
 import isEqual from 'lodash.isequal';
-import { DEFAULT_STORE } from '../../storage';
+import { logError } from '../../log';
 
 const SELECT_FWD_TO_SIGNED_OUT_CTA_COPY =
   'To select a new Forward-To address, you first need to sign-in by following the instructions on the extension pop-up.';
@@ -75,7 +74,7 @@ const SelectFwdToForm = () => {
       // Entering this branch of the control flow should not be possible
       // as the client state is validated prior to rendering the form that
       // triggered this event handler.
-      console.error('onSelectedFwdToSubmit: clientState is undefined');
+      logError('onSelectedFwdToSubmit: clientState is undefined');
       setUpdateFwdToError(SELECT_FWD_TO_SIGNED_OUT_CTA_COPY);
     } else if (selectedFwdToEmail) {
       try {
@@ -155,41 +154,6 @@ const Disclaimer = () => {
   );
 };
 
-const AutofillForm = () => {
-  const [options, setOptions] = useBrowserStorageState(
-    'iCloudHmeOptions',
-    DEFAULT_STORE.iCloudHmeOptions
-  );
-
-  return (
-    <form className="space-y-3">
-      {Object.entries(options.autofill).map(([key, value]) => (
-        <div className="flex items-center mb-3" key={key}>
-          <input
-            onChange={() =>
-              setOptions({
-                ...options,
-                autofill: { ...options.autofill, [key]: !value },
-              })
-            }
-            checked={value}
-            id={`checkbox-${key}`}
-            type="checkbox"
-            name={`checkbox-${key}`}
-            className="cursor-pointer w-4 h-4 accent-gray-900 hover:accent-gray-500"
-          />
-          <label
-            htmlFor={`checkbox-${key}`}
-            className="cursor-pointer ml-2 text-gray-900"
-          >
-            {startCase(key)}
-          </label>
-        </div>
-      ))}
-    </form>
-  );
-};
-
 const Options = () => {
   return (
     <div className="w-9/12 m-auto my-3">
@@ -201,10 +165,6 @@ const Options = () => {
         <div>
           <h3 className="font-bold text-lg mb-3">Forward To Address</h3>
           <SelectFwdToForm />
-        </div>
-        <div>
-          <h3 className="font-bold text-lg mb-3">Autofill</h3>
-          <AutofillForm />
         </div>
       </TitledComponent>
     </div>

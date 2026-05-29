@@ -25,27 +25,23 @@ _Disclaimer: This extension is not endorsed by, directly affiliated with, mainta
 
 - Simple pop-up UI for generating and reserving new Hide My Email addresses
 - Ability to manage existing Hide My Email addresses (including deactivation, reactivation, and deletion)
-- Autofilling on any HTML input element that is relevant to email
+- One-click copy of a generated address to the clipboard, ready to paste into any sign-up form
 - Quick configuration of Hide My Email settings, such as the Forward-To address, through the Options page of the extension
+
+> **Note**: This is a privacy-hardened fork. The original in-page autofill (the
+> on-focus button and right-click context menu) has been removed so the
+> extension no longer needs access to every website you visit (`<all_urls>`).
+> All functionality now lives in the toolbar pop-up; use **Copy to clipboard**
+> and paste the address where you need it. The extension only ever communicates
+> with `*.icloud.com` and requests just the `declarativeNetRequest`, `storage`,
+> and `tabs` permissions.
 
 ## Options
 
-### Address autofilling
+### Forward-To address
 
-The extension can be configured to
-
-1. show an autofill button on input field focus
-2. show a context menu item when right-clicking on input fields
-
-<p align="center">
-<img src="./src/assets/img/readme-button-autofilling.png" alt="Autofilling button on input field focus" width="400" height="auto"/>
-</p>
-
-<p align="center">
-<img src="./src/assets/img/readme-context-menu-autofilling.png" alt="Context menu item when right-clicking on input fields" width="400" height="auto"/>
-</p>
-
-You can enable/disable any of the autofilling mechanisms through the Options page of the extension.
+Through the Options page you can choose which of your real addresses your Hide
+My Email aliases forward incoming mail to.
 
 ## Develop
 

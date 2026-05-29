@@ -1,3 +1,5 @@
+import { debug } from './log';
+
 export class UnsuccessfulRequestError extends Error {}
 
 type ServiceName = 'premiummailsettings';
@@ -74,7 +76,7 @@ class ICloudClient {
         trustBrowsers: trust,
         allBrowsers: trust,
       },
-    }).catch(console.debug);
+    }).catch(debug);
   }
 }
 
