@@ -1,12 +1,12 @@
 {
-  "name": "icloud-hide-my-email-browser-extension",
+  "name": "Hardened Hide My Email Browser Extension",
   "version": "1.2.11",
-  "description": "Cross-browser extension enabling the usage of iCloud's Hide My Email service.",
+  "description": "Cross-browser extension enabling the usage of iCloud's Hide My Email service by dedoussis. Hardened by removing all unnecessary permissions and using the least privileged ones.",
   "license": "MIT",
-  "author": "dedoussis",
+  "author": "felixthuermer",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dedoussis/icloud-hide-my-email-browser-extension.git"
+    "url": "https://github.com/felixthuermer/hardened-hide-my-email-extension.git"
   },
   "scripts": {
     "prebuild": "rm -rf build",
