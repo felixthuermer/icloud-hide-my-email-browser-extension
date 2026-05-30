@@ -8,7 +8,7 @@ export const Spinner = () => {
       <FontAwesomeIcon
         icon={faSpinner}
         spin={true}
-        className="text-3xl text-sky-400"
+        className="text-3xl text-accent"
       />
     </div>
   );
@@ -25,10 +25,10 @@ export const LoadingButton = (
   const { loading, disabled, ...btnHtmlAttrs } = props;
 
   const defaultClassName =
-    'w-full justify-center text-white bg-sky-400 hover:bg-sky-500 focus:ring-4 focus:outline-hidden focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center mr-2 inline-flex items-center';
+    'w-full justify-center text-accent-contrast bg-accent hover:bg-accent-hover focus:outline-hidden focus-visible:ring-2 focus-visible:ring-accent font-medium rounded-xl px-5 py-2.5 text-center inline-flex items-center transition-colors';
 
   const diabledClassName =
-    'w-full justify-center text-white bg-gray-400 font-medium rounded-lg px-5 py-2.5 text-center mr-2 inline-flex items-center';
+    'w-full justify-center text-muted bg-elevated font-medium rounded-xl px-5 py-2.5 text-center inline-flex items-center';
 
   const btnClassName = disabled ? diabledClassName : defaultClassName;
 
@@ -50,7 +50,7 @@ export const LoadingButton = (
 export const ErrorMessage = (props: { children?: React.ReactNode }) => {
   return (
     <div
-      className="p-2 text-sm text-red-700 bg-red-100 rounded-lg"
+      className="p-2 text-sm text-danger bg-danger-bg rounded-lg"
       role="alert"
     >
       {props.children}
@@ -69,8 +69,8 @@ export const TitledComponent = (props: {
   return (
     <div className="text-base space-y-3">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900">{props.title}</h1>
-        <h2 className="font-medium text-gray-400">{props.subtitle}</h2>
+        <h1 className="text-3xl font-bold text-fg">{props.title}</h1>
+        <h2 className="font-medium text-muted">{props.subtitle}</h2>
       </div>
       {children?.map((child, key) => {
         return (
@@ -97,7 +97,7 @@ export const Link = (
   const { className, children, ...restProps } = props;
   return (
     <a
-      className={`text-sky-400 hover:text-sky-500 ${className}`}
+      className={`text-accent hover:text-accent-hover ${className}`}
       target="_blank"
       rel="noreferrer"
       {...restProps}

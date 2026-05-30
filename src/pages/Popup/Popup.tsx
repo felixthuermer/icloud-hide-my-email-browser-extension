@@ -79,7 +79,7 @@ const SignInInstructions = () => {
           </p>
         </div>
         <div
-          className="flex p-3 text-sm border text-gray-600 rounded-lg bg-gray-50"
+          className="flex p-3 text-sm border text-muted rounded-xl bg-elevated"
           role="alert"
         >
           <FontAwesomeIcon icon={faInfoCircle} className="mr-2 mt-1" />
@@ -91,7 +91,7 @@ const SignInInstructions = () => {
         </div>
         {isFirefox && (
           <div
-            className="flex p-3 text-sm border text-gray-600 rounded-lg bg-gray-50"
+            className="flex p-3 text-sm border text-muted rounded-xl bg-elevated"
             role="alert"
           >
             <FontAwesomeIcon icon={faFirefoxBrowser} className="mr-2 mt-1" />
@@ -114,7 +114,7 @@ const SignInInstructions = () => {
             href={userguideUrl}
             target="_blank"
             rel="noreferrer"
-            className="w-full justify-center text-white bg-sky-400 hover:bg-sky-500 focus:ring-4 focus:outline-hidden focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center mr-2 inline-flex items-center"
+            className="w-full justify-center text-accent-contrast bg-accent hover:bg-accent-hover focus-visible:ring-2 focus:outline-hidden focus-visible:ring-accent font-medium rounded-xl px-5 py-2.5 text-center mr-2 inline-flex items-center"
             aria-label="Help"
           >
             <FontAwesomeIcon icon={faQuestionCircle} className="mr-1" />
@@ -124,7 +124,7 @@ const SignInInstructions = () => {
             href="https://icloud.com"
             target="_blank"
             rel="noreferrer"
-            className="w-full justify-center text-white bg-sky-400 hover:bg-sky-500 focus:ring-4 focus:outline-hidden focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center mr-2 inline-flex items-center"
+            className="w-full justify-center text-accent-contrast bg-accent hover:bg-accent-hover focus-visible:ring-2 focus:outline-hidden focus-visible:ring-accent font-medium rounded-xl px-5 py-2.5 text-center mr-2 inline-flex items-center"
             aria-label="Go to iCloud.com"
           >
             <FontAwesomeIcon icon={faExternalLink} className="mr-1" /> Go to
@@ -142,11 +142,11 @@ const ReservationResult = (props: { hme: HmeEmail }) => {
   };
 
   const btnClassName =
-    'focus:outline-hidden text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 block w-full';
+    'focus:outline-hidden text-accent-contrast bg-accent hover:bg-accent-hover focus-visible:ring-2 focus-visible:ring-accent font-medium rounded-xl text-sm px-5 py-2.5 block w-full';
 
   return (
     <div
-      className="space-y-2 p-2 text-sm text-green-700 bg-green-100 rounded-lg"
+      className="space-y-2 p-2 text-sm text-success bg-success-bg rounded-xl"
       role="alert"
     >
       <p>
@@ -172,7 +172,7 @@ const FooterButton = (
 ) => {
   return (
     <button
-      className="text-sky-400 hover:text-sky-500 focus:outline-sky-400"
+      className="text-accent hover:text-accent-hover focus-visible:outline-accent"
       {...props}
     >
       <FontAwesomeIcon icon={props.icon} className="mr-1" />
@@ -187,7 +187,7 @@ const SignOutButton = (props: {
 }) => {
   return (
     <FooterButton
-      className="text-sky-400 hover:text-sky-500 focus:outline-sky-400"
+      className="text-accent hover:text-accent-hover focus-visible:outline-accent"
       onClick={async () => {
         await props.client.signOut();
         // TODO: call the react state setter instead
@@ -307,7 +307,7 @@ const HmeGenerator = (props: {
     isEmailRefreshSubmitting || hmeEmail == reservedHme?.hme;
 
   const reservationFormInputClassName =
-    'appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-hidden focus:border-sky-400 focus:z-10 sm:text-sm';
+    'appearance-none rounded-lg relative block w-full px-3 py-2 border border-border placeholder-muted text-fg focus:outline-hidden focus:border-accent focus:z-10 sm:text-sm';
 
   return (
     <TitledComponent
@@ -319,7 +319,7 @@ const HmeGenerator = (props: {
           <span className="text-2xl">
             <button className="mr-2" onClick={onEmailRefreshClick}>
               <FontAwesomeIcon
-                className="text-sky-400 hover:text-sky-500 align-text-bottom"
+                className="text-accent hover:text-accent-hover align-text-bottom"
                 icon={faRefresh}
                 spin={isEmailRefreshSubmitting}
               />
@@ -327,7 +327,7 @@ const HmeGenerator = (props: {
             {hmeEmail}
           </span>
           {fwdToEmail !== undefined && (
-            <p className="text-gray-400">Forward to: {fwdToEmail}</p>
+            <p className="text-muted">Forward to: {fwdToEmail}</p>
           )}
         </div>
         {hmeError && <ErrorMessage>{hmeError}</ErrorMessage>}
@@ -448,9 +448,9 @@ const HmeDetails = (props: {
   };
 
   const btnClassName =
-    'w-full justify-center text-white focus:ring-4 focus:outline-hidden font-medium rounded-lg px-2 py-3 text-center inline-flex items-center';
+    'w-full justify-center text-accent-contrast focus-visible:ring-2 focus:outline-hidden font-medium rounded-xl px-2 py-3 text-center inline-flex items-center';
   const labelClassName = 'font-bold';
-  const valueClassName = 'text-gray-500 truncate';
+  const valueClassName = 'text-muted truncate';
 
   return (
     <div className="space-y-2">
@@ -461,7 +461,7 @@ const HmeDetails = (props: {
             <FontAwesomeIcon
               title="Deactivated"
               icon={faBan}
-              className="text-red-500 mr-1"
+              className="text-danger mr-1"
             />
           )}
           {props.hme.hme}
@@ -497,7 +497,7 @@ const HmeDetails = (props: {
       <div className="grid grid-cols-2 gap-2">
         <button
           title="Copy"
-          className={`${btnClassName} bg-sky-400 hover:bg-sky-500 focus:ring-blue-300`}
+          className={`${btnClassName} bg-accent hover:bg-accent-hover focus-visible:ring-accent`}
           onClick={onCopyClick}
         >
           <FontAwesomeIcon icon={faClipboard} className="mr-1" /> Copy
@@ -506,8 +506,8 @@ const HmeDetails = (props: {
           title={props.hme.isActive ? 'Deactivate' : 'Reactivate'}
           className={`${btnClassName} ${
             props.hme.isActive
-              ? 'bg-red-500 hover:bg-red-600 focus:ring-red-300'
-              : 'bg-sky-400 hover:bg-sky-500 focus:ring-blue-300'
+              ? 'bg-danger hover:bg-danger-hover focus-visible:ring-danger'
+              : 'bg-accent hover:bg-accent-hover focus-visible:ring-accent'
           }`}
           onClick={onActivationClick}
           loading={isActivateSubmitting}
@@ -517,7 +517,7 @@ const HmeDetails = (props: {
         {!props.hme.isActive && (
           <LoadingButton
             title="Delete"
-            className={`${btnClassName} bg-red-500 hover:bg-red-600 focus:ring-red-300 col-span-2`}
+            className={`${btnClassName} bg-danger hover:bg-danger-hover focus-visible:ring-danger col-span-2`}
             onClick={onDeletionClick}
             loading={isDeleteSubmitting}
           >
@@ -601,13 +601,13 @@ const HmeManager = (props: {
     const selectedHmeEmail = hmeEmails[selectedHmeIdx];
 
     const searchBox = (
-      <div className="relative p-2 rounded-tl-md bg-gray-100">
+      <div className="relative p-2 rounded-tl-md bg-elevated">
         <div className="absolute inset-y-0 flex items-center pl-3 pointer-events-none">
-          <FontAwesomeIcon className="text-gray-400" icon={faSearch} />
+          <FontAwesomeIcon className="text-muted" icon={faSearch} />
         </div>
         <input
           type="search"
-          className="bg-[Canvas] pl-9 p-2 w-full rounded-sm placeholder-gray-400 border border-gray-200 focus:outline-hidden focus:border-sky-400"
+          className="bg-surface pl-9 p-2 w-full rounded-sm placeholder-muted border border-border focus:outline-hidden focus:border-accent"
           placeholder="Search"
           aria-label="Search through your HideMyEmail addresses"
           onChange={(e) => {
@@ -619,9 +619,9 @@ const HmeManager = (props: {
     );
 
     const btnBaseClassName =
-      'p-2 w-full text-left border-b last:border-b-0 cursor-pointer truncate focus:outline-sky-400';
-    const btnClassName = `${btnBaseClassName} hover:bg-gray-100`;
-    const selectedBtnClassName = `${btnBaseClassName} text-white bg-sky-400 font-medium`;
+      'p-2 w-full text-left border-b last:border-b-0 cursor-pointer truncate focus-visible:outline-accent';
+    const btnClassName = `${btnBaseClassName} hover:bg-elevated`;
+    const selectedBtnClassName = `${btnBaseClassName} text-accent-contrast bg-accent font-medium`;
 
     const labelList = hmeEmails.map((hme, idx) => (
       <button
@@ -635,7 +635,7 @@ const HmeManager = (props: {
           hme.label
         ) : (
           <div title="Deactivated">
-            <FontAwesomeIcon icon={faBan} className="text-red-500 mr-1" />
+            <FontAwesomeIcon icon={faBan} className="text-danger mr-1" />
             {hme.label}
           </div>
         )}
@@ -643,18 +643,18 @@ const HmeManager = (props: {
     ));
 
     const noSearchResult = (
-      <div className="p-3 wrap-break-word text-center text-gray-400">
+      <div className="p-3 wrap-break-word text-center text-muted">
         No results for &quot;{searchPrompt}&quot;
       </div>
     );
 
     return (
       <div className="grid grid-cols-2" style={{ height: 398 }}>
-        <div className="overflow-y-auto text-sm rounded-l-md border border-gray-200">
+        <div className="overflow-y-auto text-sm rounded-l-md border border-border">
           <div className="sticky top-0 border-b">{searchBox}</div>
           {hmeEmails.length === 0 && searchPrompt ? noSearchResult : labelList}
         </div>
-        <div className="overflow-y-auto p-2 rounded-r-md border border-l-0 border-gray-200">
+        <div className="overflow-y-auto p-2 rounded-r-md border border-l-0 border-border">
           {selectedHmeEmail && (
             <HmeDetails
               client={props.client}
@@ -669,7 +669,7 @@ const HmeManager = (props: {
   };
 
   const emptyState = (
-    <div className="text-center text-lg text-gray-400">
+    <div className="text-center text-lg text-muted">
       There are no emails to list
     </div>
   );

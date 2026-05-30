@@ -14,7 +14,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noEmit": false,
-    "jsx": "react"
+    "jsx": "react",
+    "types": []
   },
   "include": ["src"],
   "exclude": ["build", "node_modules"]

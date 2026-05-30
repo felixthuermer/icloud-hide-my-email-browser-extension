@@ -1,0 +1,100 @@
+/*
+  Shared, system-adaptive theme for the whole extension UI.
+
+  Semantic color tokens are declared on :root and overridden under
+  `prefers-color-scheme: dark`, then exposed to Tailwind v4 via `@theme inline`
+  so utilities such as `bg-surface`, `text-fg`, `bg-accent`, `text-muted`, …
+  resolve to the live CSS variable and therefore follow the system color scheme
+  automatically (no toggle required).
+
+  Palette: "iCloud Blue" — Apple system-blue accent over neutral surfaces.
+*/
+
+:root {
+  --surface: #ffffff;
+  --elevated: #f5f5f7;
+  --fg: #1d1d1f;
+  --muted: #6e6e73;
+  --border: rgba(0, 0, 0, 0.1);
+
+  --accent: #007aff;
+  --accent-hover: #0a6fe0;
+  --accent-contrast: #ffffff;
+
+  --success: #0a7d33;
+  --success-bg: rgba(52, 199, 89, 0.12);
+
+  --danger: #d70015;
+  --danger-hover: #b3000f;
+  --danger-bg: rgba(255, 59, 48, 0.12);
+
+  --warning: #8a6500;
+  --warning-bg: rgba(255, 204, 0, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #1c1c1e;
+    --elevated: #2c2c2e;
+    --fg: #f5f5f7;
+    --muted: #98989f;
+    --border: rgba(255, 255, 255, 0.12);
+
+    --accent: #0a84ff;
+    --accent-hover: #3a9bff;
+    --accent-contrast: #ffffff;
+
+    --success: #30d158;
+    --success-bg: rgba(48, 209, 88, 0.15);
+
+    --danger: #ff453a;
+    --danger-hover: #ff6b61;
+    --danger-bg: rgba(255, 69, 58, 0.15);
+
+    --warning: #ffd60a;
+    --warning-bg: rgba(255, 214, 10, 0.15);
+  }
+}
+
+/* Expose the tokens to Tailwind as color utilities. `inline` keeps the
+   reference live, so the media-query override above applies at runtime. */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-contrast: var(--accent-contrast);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-bg: var(--danger-bg);
+
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+}
+
+@layer base {
+  /*
+    Tailwind v4 defaults the border color to `currentcolor`; pin it to our
+    adaptive border token so default borders/dividers work in light and dark.
+  */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}

@@ -112,11 +112,11 @@ const SelectFwdToForm = () => {
             type="radio"
             disabled={isSubmitting}
             name={`fwdto-radio-${key}`}
-            className="cursor-pointer w-4 h-4 accent-gray-900 hover:accent-gray-500"
+            className="cursor-pointer w-4 h-4 accent-accent hover:accent-accent-hover"
           />
           <label
             htmlFor={`radio-${key}`}
-            className="cursor-pointer ml-2 text-gray-900"
+            className="cursor-pointer ml-2 text-fg"
           >
             {fwdToEmail}
           </label>

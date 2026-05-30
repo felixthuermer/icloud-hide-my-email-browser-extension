@@ -12,8 +12,8 @@ const Notice = (props: {
   const { title, children, isAlert = false } = props;
 
   const colourPalette = isAlert
-    ? 'bg-yellow-50 border-yellow-400 text-yellow-600'
-    : 'text-gray-600 bg-gray-50';
+    ? 'bg-warning-bg border-warning text-warning'
+    : 'text-muted bg-elevated';
 
   return (
     <div
@@ -59,7 +59,7 @@ const SignInInstructions = () => {
         </div>
         <p>
           Once you&apos;re signed-in to your account you&apos;re set to go. Open
-          the extension pop-up (🍏 icon) to generate a new{' '}
+          the extension pop-up (✉️ icon) to generate a new{' '}
           <span className="font-semibold">HideMyEmail</span> address! ✨
         </p>
       </div>
@@ -101,7 +101,7 @@ const UsageInstructions = () => {
     <div className="space-y-4">
       <div className="space-y-2">
         <p>
-          Click the extension icon (🍏) in your browser toolbar to open the
+          Click the extension icon (✉️) in your browser toolbar to open the
           pop-up. It provides a MacOS-System-Settings-like UI where you can
           generate a new HideMyEmail address and manage your existing ones.
         </p>
